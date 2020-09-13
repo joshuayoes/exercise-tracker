@@ -1,7 +1,10 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { AddExerciseDto } from "src/dtos/add-exercise.dto";
 import { CreateUserDto } from "src/dtos/create-user.dto";
-import { ExerciseService } from "./exercise.service";
+import {
+  ExerciseService,
+  FindUserWithExercisesOptions,
+} from "./exercise.service";
 
 @Controller("exercise")
 export class ExerciseController {
@@ -29,14 +32,27 @@ export class ExerciseController {
 
     await this.exerciseService.addExercise(request);
 
-    const { _id, username } = await this.exerciseService.findUserById(userId);
-    const rawExercises = await this.exerciseService.findExercisesByUserId(
-      userId,
-    );
-    const exercises = rawExercises.map((
-      { date, userId, description, duration },
-    ) => ({ date, userId, description, duration }));
+    const userWithExercises = await this.exerciseService
+      .findUserByIdWithExercises({ userId });
+    return userWithExercises;
+  }
 
-    return { _id, username, exercises };
+  @Get("log")
+  async logExercises(@Query() query: FindUserWithExercisesOptions) {
+    const request = {
+      ...query,
+      ...(!!query.limit && {
+        limit: Number(query.limit),
+      }),
+    };
+
+    const userWithExercises = await this.exerciseService
+      .findUserByIdWithExercises(request);
+
+    const response = {
+      ...userWithExercises,
+      count: userWithExercises.log.length,
+    };
+    return response;
   }
 }
