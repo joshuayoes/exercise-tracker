@@ -4,7 +4,7 @@ import { AppModule } from "./app.module";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.enableCors();
+  app.enableCors({ origin: /^https?:\/\/([\w-]+\.)*freecodecamp\.org/ });
   app.setGlobalPrefix("api");
   await app.listen(3000);
 }
