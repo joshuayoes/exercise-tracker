@@ -7,7 +7,7 @@ export class Exercise extends Document {
   userId: string;
 
   @Prop({ required: true })
-  duration: string;
+  duration: number;
 
   @Prop({ required: true })
   description: string;

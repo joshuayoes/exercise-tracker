@@ -43,7 +43,7 @@ export class ExerciseController {
     return {
       _id: user._id,
       username: user.username,
-      duration: exercise.duration,
+      duration: Number(exercise.duration),
       date: exercise.date,
       description: exercise.description,
     };
