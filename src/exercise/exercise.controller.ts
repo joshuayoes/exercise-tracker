@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
-import { AddExerciseDto } from "src/dtos/add-exercise.dto";
-import { CreateUserDto } from "src/dtos/create-user.dto";
+import { AddExerciseDto } from "../dtos/add-exercise.dto";
+import { CreateUserDto } from "../dtos/create-user.dto";
 import {
   ExerciseService,
   FindUserWithExercisesOptions,

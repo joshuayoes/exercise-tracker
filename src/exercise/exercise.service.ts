@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, QueryFindOptions } from "mongoose";
-import { AddExerciseDto } from "src/dtos/add-exercise.dto";
-import { CreateUserDto } from "src/dtos/create-user.dto";
-import { Exercise } from "src/schemas/exercise.schema";
-import { User } from "src/schemas/user.schema";
+import { AddExerciseDto } from "../dtos/add-exercise.dto";
+import { CreateUserDto } from "../dtos/create-user.dto";
+import { Exercise } from "../schemas/exercise.schema";
+import { User } from "../schemas/user.schema";
 import { Schema as SchemaType } from "mongoose";
 
 export type FindUserWithExercisesOptions = {
