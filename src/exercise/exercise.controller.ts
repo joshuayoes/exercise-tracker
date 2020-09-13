@@ -20,7 +20,14 @@ export class ExerciseController {
 
   @Get("users")
   async getUsers(@Query("username") username: string) {
-    const users = await this.exerciseService.findUser(username);
+    if (username) {
+      const usersWithUsername = await this.exerciseService.findUserByUsername(
+        username,
+      );
+      return usersWithUsername;
+    }
+
+    const users = await this.exerciseService.findAllUsers();
     return users;
   }
 

@@ -26,8 +26,13 @@ export class ExerciseService {
     return user.save();
   }
 
-  async findUser(username: string) {
+  async findUserByUsername(username: string) {
     const users = await this.userModel.find({ username });
+    return users;
+  }
+
+  async findAllUsers() {
+    const users = await this.userModel.find();
     return users;
   }
 
