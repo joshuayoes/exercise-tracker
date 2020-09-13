@@ -37,11 +37,16 @@ export class ExerciseController {
     const date = rawDate !== "" ? rawDate : undefined;
     const request = { description, duration, userId, date };
 
-    await this.exerciseService.addExercise(request);
+    const exercise = await this.exerciseService.addExercise(request);
+    const user = await this.exerciseService.findUserById(userId);
 
-    const userWithExercises = await this.exerciseService
-      .findUserByIdWithExercises({ userId });
-    return userWithExercises;
+    return {
+      _id: user._id,
+      username: user.username,
+      duration: exercise.duration,
+      date: exercise.date,
+      description: exercise.description,
+    };
   }
 
   @Get("log")
