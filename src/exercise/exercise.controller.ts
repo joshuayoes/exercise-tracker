@@ -44,7 +44,7 @@ export class ExerciseController {
       _id: user._id,
       username: user.username,
       duration: Number(exercise.duration),
-      date: exercise.date,
+      date: new Date(`${exercise.date}`).toDateString(),
       description: exercise.description,
     };
   }
