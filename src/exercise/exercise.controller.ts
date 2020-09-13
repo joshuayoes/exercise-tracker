@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { CreateUserDto } from "src/dtos/create-user.dto";
 import { ExerciseService } from "./exercise.service";
 
@@ -12,5 +12,11 @@ export class ExerciseController {
       createUserDto,
     );
     return { username, _id };
+  }
+
+  @Get("users")
+  async getUsers(@Query("username") username: string) {
+    const users = await this.exerciseService.findUser(username);
+    return users;
   }
 }

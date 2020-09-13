@@ -12,4 +12,9 @@ export class ExerciseService {
     const user = new this.userModel(createUserDto);
     return user.save();
   }
+
+  async findUser(username: string) {
+    const users = await this.userModel.find({ username });
+    return users;
+  }
 }
