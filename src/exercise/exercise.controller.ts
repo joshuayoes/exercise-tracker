@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { AddExerciseDto } from "../dtos/add-exercise.dto";
 import { CreateUserDto } from "../dtos/create-user.dto";
+import { UserService } from "../user/user.service";
 import {
   ExerciseService,
   FindUserWithExercisesOptions,
@@ -8,11 +9,14 @@ import {
 
 @Controller("exercise")
 export class ExerciseController {
-  constructor(private exerciseService: ExerciseService) {}
+  constructor(
+    private exerciseService: ExerciseService,
+    private userService: UserService,
+  ) {}
 
   @Post("new-user")
   async newUser(@Body() createUserDto: CreateUserDto) {
-    const { username, _id } = await this.exerciseService.createUser(
+    const { username, _id } = await this.userService.createUser(
       createUserDto,
     );
     return { username, _id };
@@ -21,13 +25,13 @@ export class ExerciseController {
   @Get("users")
   async getUsers(@Query("username") username: string) {
     if (username) {
-      const usersWithUsername = await this.exerciseService.findUserByUsername(
+      const usersWithUsername = await this.userService.findUserByUsername(
         username,
       );
       return usersWithUsername;
     }
 
-    const users = await this.exerciseService.findAllUsers();
+    const users = await this.userService.findAllUsers();
     return users;
   }
 
@@ -38,7 +42,7 @@ export class ExerciseController {
     const request = { description, duration, userId, date };
 
     const exercise = await this.exerciseService.addExercise(request);
-    const user = await this.exerciseService.findUserById(userId);
+    const user = await this.userService.findUserById(userId);
 
     return {
       _id: user._id,

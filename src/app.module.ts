@@ -7,6 +7,7 @@ import { ExerciseModule } from "./exercise/exercise.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from "@nestjs/config/dist/config.module";
 import { ConfigService } from "@nestjs/config/dist/config.service";
+import { UserModule } from "./user/user.module";
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ConfigService } from "@nestjs/config/dist/config.service";
       exclude: ["/api*"],
     }),
     ExerciseModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

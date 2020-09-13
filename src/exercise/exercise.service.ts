@@ -2,10 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, QueryFindOptions } from "mongoose";
 import { AddExerciseDto } from "../dtos/add-exercise.dto";
-import { CreateUserDto } from "../dtos/create-user.dto";
 import { Exercise } from "../schemas/exercise.schema";
-import { User } from "../schemas/user.schema";
 import { Schema as SchemaType } from "mongoose";
+import { UserService } from "../user/user.service";
 
 export type FindUserWithExercisesOptions = {
   userId: string;
@@ -17,32 +16,14 @@ export type FindUserWithExercisesOptions = {
 @Injectable()
 export class ExerciseService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(Exercise.name) private exerciseModel: Model<Exercise>,
+    private userService: UserService,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto) {
-    const user = new this.userModel(createUserDto);
-    return user.save();
-  }
-
-  async findUserByUsername(username: string) {
-    const users = await this.userModel.find({ username });
-    return users;
-  }
-
-  async findAllUsers() {
-    const users = await this.userModel.find();
-    return users;
-  }
-
-  async findUserById(_id: string) {
-    const user = await this.userModel.findById(_id);
-    return user;
-  }
-
   async findUserByIdWithExercises(options: FindUserWithExercisesOptions) {
-    const { _id, username } = await this.findUserById(options.userId);
+    const { _id, username } = await this.userService.findUserById(
+      options.userId,
+    );
     const rawExercises = await this.findExercisesByUserId(
       options,
     );
