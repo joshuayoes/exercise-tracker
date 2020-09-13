@@ -3,7 +3,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
-import { ExerciseModule } from './exercise/exercise.module';
+import { ExerciseModule } from "./exercise/exercise.module";
 
 @Module({
   imports: [
