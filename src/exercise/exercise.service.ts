@@ -66,7 +66,6 @@ export class ExerciseService {
       }
       : undefined;
     const queryOptions: QueryFindOptions = !!limit ? { limit } : undefined;
-    console.log({ userId, date, queryOptions });
 
     const userExercises = this.exerciseModel.find(
       { userId, ...(date && { date }) },
