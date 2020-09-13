@@ -1,5 +1,6 @@
 import { getModelToken } from "@nestjs/mongoose";
 import { Test, TestingModule } from "@nestjs/testing";
+import { UserDto } from "../dtos/user.dto";
 import { Exercise } from "../schemas/exercise.schema";
 import { User } from "../schemas/user.schema";
 import { UserService } from "../user/user.service";
@@ -48,9 +49,54 @@ describe("ExerciseController", () => {
   });
 
   it("should return /new-user POST route that returns user model", async () => {
-    const result = Promise.resolve(userModel) as Promise<User>;
+    const result: Promise<UserDto> = Promise.resolve(userModel);
     jest.spyOn(userService, "createUser").mockImplementation(() => result);
 
     expect(await controller.newUser(userModel)).toStrictEqual(userModel);
+  });
+
+  it("should have defined /users GET route", () => {
+    expect(controller.getUsers).toBeDefined();
+  });
+
+  it("should return /users GET route that returns list of users", async () => {
+    const users: UserDto[] = [userModel, userModel, userModel];
+    const result = Promise.resolve(users);
+
+    jest.spyOn(userService, "findUserByUsername").mockImplementation(() =>
+      result
+    );
+    jest.spyOn(userService, "findAllUsers").mockImplementation(() => result);
+
+    expect(await controller.getUsers("username")).toStrictEqual(users);
+    expect(await controller.getUsers()).toStrictEqual(users);
+  });
+
+  it("should have defined /add POST route", () => {
+    expect(controller.addExercise).toBeDefined();
+  });
+
+  it("should return /add POST route that returns added exercise response", async () => {
+    const { duration, description, date } = exerciseModel;
+
+    const response = {
+      duration,
+      description,
+      date: new Date(date).toDateString(),
+      ...userModel,
+    };
+
+    jest.spyOn(exerciseService, "addExercise").mockImplementation(() =>
+      Promise.resolve(exerciseModel as unknown as Exercise)
+    );
+    jest.spyOn(userService, "findUserById").mockImplementation(() =>
+      Promise.resolve(userModel)
+    );
+
+    expect(await controller.addExercise(exerciseModel)).toEqual(response);
+  });
+
+  it("should have defined /log GET route", () => {
+    expect(controller.logExercises).toBeDefined();
   });
 });

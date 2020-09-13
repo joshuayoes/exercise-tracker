@@ -1,11 +1,14 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { AddExerciseDto } from "../dtos/add-exercise.dto";
 import { CreateUserDto } from "../dtos/create-user.dto";
+import { UserDto } from "../dtos/user.dto";
 import { UserService } from "../user/user.service";
 import {
   ExerciseService,
   FindUserWithExercisesOptions,
 } from "./exercise.service";
+
+export type AddExerciseResponse = Omit<AddExerciseDto, "userId"> & UserDto;
 
 @Controller("exercise")
 export class ExerciseController {
@@ -15,7 +18,7 @@ export class ExerciseController {
   ) {}
 
   @Post("new-user")
-  async newUser(@Body() createUserDto: CreateUserDto) {
+  async newUser(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
     const { username, _id } = await this.userService.createUser(
       createUserDto,
     );
@@ -23,7 +26,7 @@ export class ExerciseController {
   }
 
   @Get("users")
-  async getUsers(@Query("username") username: string) {
+  async getUsers(@Query("username") username?: string): Promise<UserDto[]> {
     if (username) {
       const usersWithUsername = await this.userService.findUserByUsername(
         username,
@@ -36,7 +39,9 @@ export class ExerciseController {
   }
 
   @Post("add")
-  async addExercise(@Body() addExerciseDto: AddExerciseDto) {
+  async addExercise(
+    @Body() addExerciseDto: AddExerciseDto,
+  ): Promise<AddExerciseResponse> {
     const { description, duration, userId, date: rawDate } = addExerciseDto;
     const date = rawDate !== "" ? rawDate : undefined;
     const request = { description, duration, userId, date };
